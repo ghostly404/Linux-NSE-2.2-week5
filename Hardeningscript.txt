@@ -1,0 +1,15 @@
+#!/bin/bash
+path=/etc/apache2/apache2.conf
+cp $path /home/
+echo "\nBackup is aangemaakt in home folder\n"
+echo '#Hardening opties' >> $path
+echo 'ServerTokens Prod' >> $path
+echo "ServerToken veranderd, http afgeschermd\n"
+echo 'TraceEnable off' >> $path
+echo "Tracing uitgezet\n"
+echo 'ServerSignature off' >> $path
+echo "Signature uitgezet\n"
+sed -i 's@^\(Timeout\) 300@\1 60@g' $path >> $path
+echo "Timeout verlaagd\n"
+echo "Apache serivce herstarten..."
+service apache2 restart
