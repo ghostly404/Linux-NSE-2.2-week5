@@ -1,0 +1,26 @@
+#Made by Qwzl
+---
+- name: install docker and run basic container
+  become: true
+  hosts: servers
+
+  tasks:
+  - name: install Docker.io package
+    ansible.builtin.apt:
+      name: docker.io
+      # do apt update before install
+      update_cache: yes
+  - name: run busybox container
+    community.docker.docker_container:
+      name: ChrisJanseDocker
+      image: busybox
+      command: ["sleep", "infinity"]
+  - name: list containers
+    shell:
+      "docker ps"
+    register: container_ls
+  - name: list container output
+    debug:
+      msg: "{{container_ls.stdout_lines}}"
+
+

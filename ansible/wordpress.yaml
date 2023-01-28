@@ -1,0 +1,48 @@
+---
+- hosts: servers
+  become: true
+  vars:
+    db: mariadb
+  tasks:
+   - name: MariaDB
+     docker_container:
+       name: mariadb
+       image: mariadb
+       pull: true
+       volumes:
+       - "{{db}}:/var/lib/mysql"
+       env:
+         MYSQL_ROOT_PASSWORD: chrisjanse
+         MYSQL_PASSWORD: chrisjanse
+         MYSQL_DATABASE: db
+         MYSQL_USER: mysqluser
+   - name: Wordpress
+     docker_container:
+       image: wordpress
+       name: wordpress 
+       restart_policy: always
+       ports: 
+       - "80:80"
+       links:
+       - "{{db}}:/var/lib/mysql"
+       volumes:
+       - "{{db}}:/var/www/html"
+       healthcheck:
+         test: ["CMD","curl","--fail","http://127.0.0.1:80"]
+         interval: 1m
+         timeout: 10s
+         retries:  3
+         start_period: 30s
+       pull: true
+       env:
+         MYSQL_HOST: mariadb
+         MYSQL_PASSWORD: chrisjanse
+         MYSQL_DATABASE: db
+         MYSQL_USER: mysqluser
+   - name: list containers
+     shell:
+        "docker ps"
+     register: container_ls
+   - name: list container output
+     debug:
+       msg: "{{container_ls.stdout_lines}}"
