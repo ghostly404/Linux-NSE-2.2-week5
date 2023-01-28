@@ -2,8 +2,8 @@
 
 Opdracht voor week 4 en 5
 
--lever twee servers die op auzre draaien en met elkaar kunnen sshen
-- de hoofdserver bevast:
+lever twee servers die op auzre draaien en met elkaar kunnen sshen
+  de hoofdserver bevast:
   Een logserver (Rsyslog) gebouwd met een script
   Een monitoring software(nagios) gebouwd met een script
   ansible playbook voor wordpress
